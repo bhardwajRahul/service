@@ -20,8 +20,7 @@ import (
 	"github.com/ardanlabs/service/business/sdk/sqldb"
 	"github.com/ardanlabs/service/foundation/keystore"
 	"github.com/ardanlabs/service/foundation/logger"
-	"github.com/ardanlabs/service/foundation/tracer"
-	"github.com/ardanlabs/service/foundation/web"
+	"github.com/ardanlabs/service/foundation/otel"
 )
 
 var build = "develop"
@@ -36,7 +35,7 @@ func main() {
 	}
 
 	traceIDFn := func(ctx context.Context) string {
-		return web.GetTraceID(ctx)
+		return otel.GetTraceID(ctx)
 	}
 
 	log = logger.NewWithEvents(os.Stdout, logger.LevelInfo, "AUTH", traceIDFn, events)
@@ -171,8 +170,7 @@ func run(ctx context.Context, log *logger.Logger) error {
 
 	log.Info(ctx, "startup", "status", "initializing tracing support")
 
-	traceProvider, err := tracer.InitTracing(tracer.Config{
-		Log:         log,
+	traceProvider, err := otel.InitTracing(otel.Config{
 		ServiceName: cfg.Tempo.ServiceName,
 		Host:        cfg.Tempo.Host,
 		ExcludedRoutes: map[string]struct{}{

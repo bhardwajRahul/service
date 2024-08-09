@@ -6,7 +6,7 @@ import (
 
 	"github.com/ardanlabs/service/app/sdk/errs"
 	"github.com/ardanlabs/service/foundation/logger"
-	"github.com/ardanlabs/service/foundation/tracer"
+	"github.com/ardanlabs/service/foundation/otel"
 )
 
 // Errors handles errors coming out of the call chain.
@@ -17,7 +17,7 @@ func Errors(ctx context.Context, log *logger.Logger, next HandlerFunc) Encoder {
 		return resp
 	}
 
-	_, span := tracer.AddSpan(ctx, "app.sdk.mid.error")
+	_, span := otel.AddSpan(ctx, "app.sdk.mid.error")
 	span.RecordError(err)
 	defer span.End()
 
@@ -26,7 +26,14 @@ func Errors(ctx context.Context, log *logger.Logger, next HandlerFunc) Encoder {
 		appErr = errs.Newf(errs.Internal, "Internal Server Error")
 	}
 
-	log.Error(ctx, "handled error during request", "err", err, "source_err_file", path.Base(appErr.FileName), "source_err_func", path.Base(appErr.FuncName))
+	log.Error(ctx, "handled error during request",
+		"err", err,
+		"source_err_file", path.Base(appErr.FileName),
+		"source_err_func", path.Base(appErr.FuncName))
+
+	if appErr.Code == errs.InternalOnlyLog {
+		appErr = errs.Newf(errs.Internal, "Internal Server Error")
+	}
 
 	// Send the error to the transport package so the error can be
 	// used as the response.
