@@ -110,14 +110,14 @@ SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 # Define dependencies
 
 GOLANG          := golang:1.26
-ALPINE          := alpine:3.23
+ALPINE          := alpine:3.24
 KIND            := kindest/node:v1.36.1
-POSTGRES        := postgres:18.4
-GRAFANA         := grafana/grafana:12.4.0
-PROMETHEUS      := prom/prometheus:v3.12.0
-TEMPO           := grafana/tempo:2.10.0
-LOKI            := grafana/loki:3.7.0
-PROMTAIL        := grafana/promtail:3.6.0
+POSTGRES        := postgres:18.6
+GRAFANA         := grafana/grafana:13.1.3
+PROMETHEUS      := prom/prometheus:v3.13.2
+TEMPO           := grafana/tempo:3.0.3
+LOKI            := grafana/loki:3.7.6
+PROMTAIL        := grafana/promtail:3.6.11
 
 KIND_CLUSTER    := ardan-starter-cluster
 NAMESPACE       := sales-system
@@ -612,7 +612,7 @@ admin-gui-install:
 	pnpm -C ${ADMIN_FRONTEND_PREFIX} install
 
 admin-gui-update:
-	pnpm -C ${ADMIN_FRONTEND_PREFIX} update
+	pnpm -C ${ADMIN_FRONTEND_PREFIX} update --latest
 
 admin-gui-dev: admin-gui-install
 	pnpm -C ${ADMIN_FRONTEND_PREFIX} run dev

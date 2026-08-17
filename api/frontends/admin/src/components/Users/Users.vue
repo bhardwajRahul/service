@@ -152,7 +152,7 @@ export default {
             this.successDelete(name);
             this.dialogs.confirmation.item = {};
             break;
-          default:
+          default: {
             let userDeleteData;
             try {
               userDeleteData = await fetchCall.json();
@@ -170,6 +170,7 @@ export default {
             ];
             this.failure(errors);
             break;
+          }
         }
       } catch (error) {
         const errors = [

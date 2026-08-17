@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/styles/variables.scss";
+@use "@/styles/variables.scss" as *;
 .ui-data-table.v-data-table table tbody > tr:nth-child(odd) td:last-child > * {
   background-color: #fff;
 }

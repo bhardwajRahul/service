@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/styles/variables.scss";
+@use "@/styles/variables.scss" as *;
 .ui-data-table--actions thead.v-data-table-header > tr > th:last-child > span {
   opacity: 0;
 }

@@ -11,6 +11,7 @@
     <v-list density="compact" nav>
       <v-list-item
         v-for="menu in availableMenus"
+        :key="menu.name"
         class="bar__items"
         :prepend-icon="menu.icon"
         :title="menu.title"

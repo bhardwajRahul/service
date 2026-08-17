@@ -47,7 +47,7 @@ data:
         jsonData:
           httpMethod: POST
           prometheusType: Prometheus
-          prometheusVersion: 2.44.0
+          prometheusVersion: 3.13.2
           nodeGraph:
             enabled: true
           search:
@@ -394,7 +394,7 @@ spec:
       terminationGracePeriodSeconds: 60
       containers:
         - name: grafana
-          image: grafana/grafana:12.4.0
+          image: grafana/grafana:13.1.3
           imagePullPolicy: IfNotPresent
           env:
             - name: GF_ANALYTICS_REPORTING_ENABLED
@@ -403,8 +403,6 @@ spec:
               value: "false"
             - name: GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES
               value: "false"
-            - name: GF_FEATURE_TOGGLES_ENABLE
-              value: "traceqlEditor"
             - name: GF_SERVER_HTTP_PORT
               value: "3100"
             - name: GF_AUTH_DISABLE_LOGIN_FORM

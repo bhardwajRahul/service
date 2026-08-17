@@ -216,7 +216,7 @@ export default {
                 passwordConfirm: "",
               };
               break;
-            default:
+            default: {
               const errors = [
                 { message: "Creating user went wrong" },
                 { message: `Error Code: ${fetchCall.status}` },
@@ -224,6 +224,7 @@ export default {
               ];
               this.$emit("error", errors);
               break;
+            }
           }
         } catch (error) {
           const errors = [

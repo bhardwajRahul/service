@@ -24,7 +24,7 @@ RUN go build -ldflags "-X main.tag=${BUILD_TAG}"
 
 
 # Run the Go Binary in Alpine.
-FROM alpine:3.23
+FROM alpine:3.24
 ARG BUILD_DATE
 ARG BUILD_TAG
 RUN addgroup -g 1000 -S sales && \

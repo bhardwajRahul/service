@@ -224,7 +224,7 @@ export default {
                 },
               };
               break;
-            default:
+            default: {
               const errors = [
                 { message: "Creating home went wrong" },
                 { message: `Error Code: ${fetchCall.status}` },
@@ -243,6 +243,7 @@ export default {
               }
               this.$emit("error", errors);
               break;
+            }
           }
         } catch (error) {
           const errors = [
