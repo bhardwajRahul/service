@@ -119,13 +119,11 @@ func HandleAuthorization(ctx context.Context, authorizationHeader string, userBu
 	}
 
 	claims := auth.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject:   usr.ID.String(),
-			Issuer:    ath.Issuer(),
-			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(8760 * time.Hour)),
-			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-		},
-		Roles: role.ParseToString(usr.Roles),
+		Subject:   usr.ID.String(),
+		Issuer:    ath.Issuer(),
+		ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(8760 * time.Hour)),
+		IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+		Roles:     role.ParseToString(usr.Roles),
 	}
 
 	subjectID, err := uuid.Parse(claims.Subject)

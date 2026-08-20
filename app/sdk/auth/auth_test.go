@@ -35,13 +35,11 @@ func Test_Auth(t *testing.T) {
 func test1(ath *auth.Auth) func(t *testing.T) {
 	f := func(t *testing.T) {
 		claims := auth.Claims{
-			RegisteredClaims: jwt.RegisteredClaims{
-				Issuer:    ath.Issuer(),
-				Subject:   "5cf37266-3473-4006-984f-9325122678b7",
-				ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
-				IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-			},
-			Roles: []string{role.Admin.String()},
+			Issuer:    ath.Issuer(),
+			Subject:   "5cf37266-3473-4006-984f-9325122678b7",
+			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+			Roles:     []string{role.Admin.String()},
 		}
 
 		token, err := ath.GenerateToken(kid, claims)
@@ -78,13 +76,11 @@ func test1(ath *auth.Auth) func(t *testing.T) {
 func test2(ath *auth.Auth) func(t *testing.T) {
 	f := func(t *testing.T) {
 		claims := auth.Claims{
-			RegisteredClaims: jwt.RegisteredClaims{
-				Issuer:    ath.Issuer(),
-				Subject:   "5cf37266-3473-4006-984f-9325122678b7",
-				ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
-				IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-			},
-			Roles: []string{role.User.String()},
+			Issuer:    ath.Issuer(),
+			Subject:   "5cf37266-3473-4006-984f-9325122678b7",
+			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+			Roles:     []string{role.User.String()},
 		}
 
 		token, err := ath.GenerateToken(kid, claims)
@@ -126,13 +122,11 @@ func test2(ath *auth.Auth) func(t *testing.T) {
 func test3(ath *auth.Auth) func(t *testing.T) {
 	f := func(t *testing.T) {
 		claims := auth.Claims{
-			RegisteredClaims: jwt.RegisteredClaims{
-				Issuer:    ath.Issuer(),
-				Subject:   "5cf37266-3473-4006-984f-9325122678b7",
-				ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
-				IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-			},
-			Roles: []string{role.User.String()},
+			Issuer:    ath.Issuer(),
+			Subject:   "5cf37266-3473-4006-984f-9325122678b7",
+			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+			Roles:     []string{role.User.String()},
 		}
 
 		token, err := ath.GenerateToken(kid, claims)
@@ -159,13 +153,11 @@ func test3(ath *auth.Auth) func(t *testing.T) {
 func test4(ath *auth.Auth) func(t *testing.T) {
 	f := func(t *testing.T) {
 		claims := auth.Claims{
-			RegisteredClaims: jwt.RegisteredClaims{
-				Issuer:    ath.Issuer(),
-				Subject:   "5cf37266-3473-4006-984f-9325122678b7",
-				ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
-				IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-			},
-			Roles: []string{role.User.String(), role.Admin.String()},
+			Issuer:    ath.Issuer(),
+			Subject:   "5cf37266-3473-4006-984f-9325122678b7",
+			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+			Roles:     []string{role.User.String(), role.Admin.String()},
 		}
 		userID := uuid.MustParse("9e979baa-61c9-4b50-81f2-f216d53f5c15")
 
@@ -191,13 +183,11 @@ func test4(ath *auth.Auth) func(t *testing.T) {
 func test5(ath *auth.Auth) func(t *testing.T) {
 	f := func(t *testing.T) {
 		claims := auth.Claims{
-			RegisteredClaims: jwt.RegisteredClaims{
-				Issuer:    ath.Issuer(),
-				Subject:   "5cf37266-3473-4006-984f-9325122678b7",
-				ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
-				IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-			},
-			Roles: []string{role.User.String()},
+			Issuer:    ath.Issuer(),
+			Subject:   "5cf37266-3473-4006-984f-9325122678b7",
+			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+			Roles:     []string{role.User.String()},
 		}
 		userID := uuid.MustParse("9e979baa-61c9-4b50-81f2-f216d53f5c15")
 
@@ -223,13 +213,11 @@ func test5(ath *auth.Auth) func(t *testing.T) {
 func test6(ath *auth.Auth) func(t *testing.T) {
 	f := func(t *testing.T) {
 		claims := auth.Claims{
-			RegisteredClaims: jwt.RegisteredClaims{
-				Issuer:    ath.Issuer(),
-				Subject:   "5cf37266-3473-4006-984f-9325122678b7",
-				ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
-				IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-			},
-			Roles: []string{role.Admin.String()},
+			Issuer:    ath.Issuer(),
+			Subject:   "5cf37266-3473-4006-984f-9325122678b7",
+			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+			Roles:     []string{role.Admin.String()},
 		}
 		userID := uuid.MustParse("9e979baa-61c9-4b50-81f2-f216d53f5c15")
 

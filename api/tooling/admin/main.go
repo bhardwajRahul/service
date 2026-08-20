@@ -48,10 +48,8 @@ func main() {
 
 func run(log *logger.Logger) error {
 	cfg := config{
-		Version: conf.Version{
-			Build: build,
-			Desc:  "copyright information here",
-		},
+		Build: build,
+		Desc:  "copyright information here",
 	}
 
 	const prefix = "SALES"

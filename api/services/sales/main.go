@@ -119,10 +119,8 @@ func run(ctx context.Context, log *logger.Logger) error {
 			// this even lower.
 		}
 	}{
-		Version: conf.Version{
-			Build: tag,
-			Desc:  "Sales",
-		},
+		Build: tag,
+		Desc:  "Sales",
 	}
 
 	const prefix = "SALES"

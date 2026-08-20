@@ -95,10 +95,8 @@ func run(ctx context.Context, log *logger.Logger) error {
 			Probability float64 `conf:"default:0.05"`
 		}
 	}{
-		Version: conf.Version{
-			Build: tag,
-			Desc:  "Auth",
-		},
+		Build: tag,
+		Desc:  "Auth",
 	}
 
 	const prefix = "AUTH"

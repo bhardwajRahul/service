@@ -58,13 +58,11 @@ func (a *app) authCallback(ctx context.Context, r *http.Request) web.Encoder {
 	}
 
 	clms := auth.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject:   user.UserID,
-			Issuer:    a.auth.Issuer(),
-			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(2 * time.Hour)),
-			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-		},
-		Roles: []string{role.Admin.String()},
+		Subject:   user.UserID,
+		Issuer:    a.auth.Issuer(),
+		ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(2 * time.Hour)),
+		IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+		Roles:     []string{role.Admin.String()},
 	}
 
 	token, err := a.auth.GenerateToken(a.tokenKey, clms)

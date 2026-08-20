@@ -78,13 +78,11 @@ func GenToken(log *logger.Logger, dbConfig sqldb.Config, keyPath string, userID 
 	// iat (issued at time): Time at which the JWT was issued; can be used to determine age of the JWT
 	// jti (JWT ID): Unique identifier; can be used to prevent the JWT from being replayed (allows a token to be used only once)
 	claims := auth.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject:   usr.ID.String(),
-			Issuer:    ath.Issuer(),
-			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(8760 * time.Hour)),
-			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-		},
-		Roles: role.ParseToString(usr.Roles),
+		Subject:   usr.ID.String(),
+		Issuer:    ath.Issuer(),
+		ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(8760 * time.Hour)),
+		IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+		Roles:     role.ParseToString(usr.Roles),
 	}
 
 	// This will generate a JWT with the claims embedded in them. The database

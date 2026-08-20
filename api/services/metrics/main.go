@@ -84,10 +84,8 @@ func run(ctx context.Context, log *logger.Logger) error {
 			Interval time.Duration `conf:"default:5s"`
 		}
 	}{
-		Version: conf.Version{
-			Build: tag,
-			Desc:  "copyright information here",
-		},
+		Build: tag,
+		Desc:  "copyright information here",
 	}
 
 	const prefix = "METRICS"

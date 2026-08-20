@@ -108,13 +108,11 @@ func Token(userBus userbus.ExtBusiness, ath *auth.Auth, email string) string {
 	}
 
 	claims := auth.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject:   dbUsr.ID.String(),
-			Issuer:    ath.Issuer(),
-			ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
-			IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
-		},
-		Roles: role.ParseToString(dbUsr.Roles),
+		Subject:   dbUsr.ID.String(),
+		Issuer:    ath.Issuer(),
+		ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(time.Hour)),
+		IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
+		Roles:     role.ParseToString(dbUsr.Roles),
 	}
 
 	token, err := ath.GenerateToken(kid, claims)

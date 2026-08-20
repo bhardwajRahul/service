@@ -112,16 +112,14 @@ func (a *App) Authorize(ctx context.Context, req *AuthorizeRequest) (*AuthorizeR
 
 	// Convert gRPC request to auth client format
 	claims := auth.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			ID:        reqClaims.GetId(),
-			Issuer:    reqClaims.GetIssuer(),
-			Subject:   reqClaims.GetSubject(),
-			Audience:  reqClaims.GetAudience(),
-			ExpiresAt: int64ToND(reqClaims.GetExpiresAt()),
-			NotBefore: int64ToND(reqClaims.GetNotBefore()),
-			IssuedAt:  int64ToND(reqClaims.GetIssuedAt()),
-		},
-		Roles: reqClaims.GetRoles(),
+		ID:        reqClaims.GetId(),
+		Issuer:    reqClaims.GetIssuer(),
+		Subject:   reqClaims.GetSubject(),
+		Audience:  reqClaims.GetAudience(),
+		ExpiresAt: int64ToND(reqClaims.GetExpiresAt()),
+		NotBefore: int64ToND(reqClaims.GetNotBefore()),
+		IssuedAt:  int64ToND(reqClaims.GetIssuedAt()),
+		Roles:     reqClaims.GetRoles(),
 	}
 
 	userID, err := uuid.Parse(reqUserID)

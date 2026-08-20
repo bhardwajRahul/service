@@ -43,16 +43,14 @@ func authenticateRespFromGRPC(a *grpcauthapp.AuthenticateResponse) (authclient.A
 
 	c := a.GetClaims()
 	claims := auth.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			ID:        c.GetId(),
-			Issuer:    c.GetIssuer(),
-			Subject:   c.GetSubject(),
-			Audience:  c.GetAudience(),
-			ExpiresAt: int64ToND(c.GetExpiresAt()),
-			NotBefore: int64ToND(c.GetNotBefore()),
-			IssuedAt:  int64ToND(c.GetIssuedAt()),
-		},
-		Roles: c.GetRoles(),
+		ID:        c.GetId(),
+		Issuer:    c.GetIssuer(),
+		Subject:   c.GetSubject(),
+		Audience:  c.GetAudience(),
+		ExpiresAt: int64ToND(c.GetExpiresAt()),
+		NotBefore: int64ToND(c.GetNotBefore()),
+		IssuedAt:  int64ToND(c.GetIssuedAt()),
+		Roles:     c.GetRoles(),
 	}
 
 	resp := authclient.AuthenticateResp{

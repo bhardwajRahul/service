@@ -7,17 +7,17 @@ SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 # ==============================================================================
 # Go Installation
 #
-#	You need to have Go version 1.26 to run this code.
+#	You need to have Go version 1.27 to run this code.
 #
 #	https://go.dev/dl/
 #
 #	If you are not allowed to update your Go frontend, you can install
-#	and use a 1.26 frontend.
+#	and use a 1.27 frontend.
 #
-#	$ go install golang.org/dl/go1.26@latest
-#	$ go1.26 download
+#	$ go install golang.org/dl/go1.27@latest
+#	$ go1.27 download
 #
-#	This means you need to use `go1.26` instead of `go` for any command
+#	This means you need to use `go1.27` instead of `go` for any command
 #	using the Go frontend tooling from the makefile.
 
 # ==============================================================================
@@ -109,7 +109,7 @@ SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 # ==============================================================================
 # Define dependencies
 
-GOLANG          := golang:1.26
+GOLANG          := golang:1.27
 ALPINE          := alpine:3.24
 KIND            := kindest/node:v1.36.1
 POSTGRES        := postgres:18.6
