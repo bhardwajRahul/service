@@ -616,7 +616,7 @@ All configuration is driven by environment variables using the `ardanlabs/conf` 
 - **Kubernetes/Kind** — Container orchestration (development uses Kind clusters)
 - **Docker** — Container builds
 - **Kustomize** — Kubernetes manifest management
-- **Grafana/Prometheus/Tempo/Loki/Promtail** — Observability stack
+- **Grafana/Prometheus/Tempo/Loki/Alloy** — Observability stack
 - **OPA** — Policy-based authorization (embedded, not external)
 
 ---

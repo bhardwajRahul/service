@@ -81,7 +81,7 @@ SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 # CLASS NOTES
 #
 # Kind
-# 	For full Kind v0.32 release notes: https://github.com/kubernetes-sigs/kind/releases/tag/v0.32.0
+# 	For full Kind v0.33 release notes: https://github.com/kubernetes-sigs/kind/releases/tag/v0.33.0
 #
 # RSA Keys
 # 	To generate a private/public key PEM file.
@@ -111,13 +111,13 @@ SHELL = $(if $(wildcard $(SHELL_PATH)),/bin/ash,/bin/bash)
 
 GOLANG          := golang:1.27
 ALPINE          := alpine:3.24
-KIND            := kindest/node:v1.36.1
+KIND            := kindest/node:v1.37.0
 POSTGRES        := postgres:18.6
-GRAFANA         := grafana/grafana:13.1.3
-PROMETHEUS      := prom/prometheus:v3.13.2
+GRAFANA         := grafana/grafana:13.2.0
+PROMETHEUS      := prom/prometheus:v3.14.0
 TEMPO           := grafana/tempo:3.0.3
-LOKI            := grafana/loki:3.7.6
-PROMTAIL        := grafana/promtail:3.6.11
+LOKI            := grafana/loki:3.7.7
+ALLOY           := grafana/alloy:v1.19.2
 
 KIND_CLUSTER    := ardan-starter-cluster
 NAMESPACE       := sales-system
@@ -172,7 +172,7 @@ dev-docker:
 	docker pull docker.io/$(PROMETHEUS) & \
 	docker pull docker.io/$(TEMPO) & \
 	docker pull docker.io/$(LOKI) & \
-	docker pull docker.io/$(PROMTAIL) & \
+	docker pull docker.io/$(ALLOY) & \
 	wait;
 
 # ==============================================================================
@@ -224,7 +224,7 @@ dev-up:
 	docker save $(PROMETHEUS) | docker exec -i $(KIND_CLUSTER)-control-plane ctr --namespace=k8s.io images import - & \
 	docker save $(TEMPO) | docker exec -i $(KIND_CLUSTER)-control-plane ctr --namespace=k8s.io images import - & \
 	docker save $(LOKI) | docker exec -i $(KIND_CLUSTER)-control-plane ctr --namespace=k8s.io images import - & \
-	docker save $(PROMTAIL) | docker exec -i $(KIND_CLUSTER)-control-plane ctr --namespace=k8s.io images import - & \
+	docker save $(ALLOY) | docker exec -i $(KIND_CLUSTER)-control-plane ctr --namespace=k8s.io images import - & \
 	wait;
 
 dev-down:
@@ -259,7 +259,7 @@ dev-apply:
 	kustomize build zarf/k8s/dev/prometheus | kubectl apply -f -
 	kustomize build zarf/k8s/dev/tempo | kubectl apply -f -
 	kustomize build zarf/k8s/dev/loki | kubectl apply -f -
-	kustomize build zarf/k8s/dev/promtail | kubectl apply -f -
+	kustomize build zarf/k8s/dev/alloy | kubectl apply -f -
 
 	kustomize build zarf/k8s/dev/database | kubectl apply -f -
 	kubectl rollout status --namespace=$(NAMESPACE) --watch --timeout=120s sts/database
@@ -323,8 +323,8 @@ dev-logs-tempo:
 dev-logs-loki:
 	kubectl logs --namespace=$(NAMESPACE) -l app=loki --all-containers=true -f --tail=100
 
-dev-logs-promtail:
-	kubectl logs --namespace=$(NAMESPACE) -l app=promtail --all-containers=true -f --tail=100
+dev-logs-alloy:
+	kubectl logs --namespace=$(NAMESPACE) -l app=alloy --all-containers=true -f --tail=100
 
 # ------------------------------------------------------------------------------
 
@@ -333,7 +333,7 @@ dev-services-delete:
 	kustomize build zarf/k8s/dev/grafana | kubectl delete -f -
 	kustomize build zarf/k8s/dev/tempo | kubectl delete -f -
 	kustomize build zarf/k8s/dev/loki | kubectl delete -f -
-	kustomize build zarf/k8s/dev/promtail | kubectl delete -f -
+	kustomize build zarf/k8s/dev/alloy | kubectl delete -f -
 	kustomize build zarf/k8s/dev/database | kubectl delete -f -
 
 dev-describe-replicaset:
@@ -661,7 +661,7 @@ help:
 	@echo "  dev-logs-grafana        Show the logs for the grafana service"
 	@echo "  dev-logs-tempo          Show the logs for the tempo service"
 	@echo "  dev-logs-loki           Show the logs for the loki service"
-	@echo "  dev-logs-promtail       Show the logs for the promtail service"
+	@echo "  dev-logs-alloy          Show the logs for the alloy service"
 	@echo "  dev-services-delete     Delete all"
 	@echo "  dev-up-registry         Start KIND with local registry"
 	@echo "  dev-down-registry       Stop KIND and local registry"

@@ -1,0 +1,208 @@
+# Alloy discovers pods and sends their logs to Loki through the Kubernetes API.
+# The ServiceAccount, ClusterRole, and ClusterRoleBinding grant pod discovery and
+# log access without requiring root privileges or host filesystem mounts.
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sales-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alloy-conf
+  namespace: sales-system
+data:
+  config.alloy: |
+    logging {
+      level = "info"
+    }
+
+    discovery.kubernetes "pods" {
+      role = "pod"
+    }
+
+    discovery.relabel "pod_logs" {
+      targets = discovery.kubernetes.pods.targets
+
+      rule {
+        source_labels = ["__meta_kubernetes_pod_controller_name"]
+        regex         = "([0-9a-z-.]+?)(-[0-9a-f]{8,10})?"
+        action        = "replace"
+        target_label  = "__tmp_controller_name"
+      }
+
+      rule {
+        source_labels = [
+          "__meta_kubernetes_pod_label_app_kubernetes_io_name",
+          "__meta_kubernetes_pod_label_app",
+          "__tmp_controller_name",
+          "__meta_kubernetes_pod_name",
+        ]
+        regex        = "^;*([^;]+)(;.*)?$"
+        action       = "replace"
+        target_label = "app"
+      }
+
+      rule {
+        source_labels = [
+          "__meta_kubernetes_pod_label_app_kubernetes_io_instance",
+          "__meta_kubernetes_pod_label_release",
+        ]
+        regex        = "^;*([^;]+)(;.*)?$"
+        action       = "replace"
+        target_label = "instance"
+      }
+
+      rule {
+        source_labels = [
+          "__meta_kubernetes_pod_label_app_kubernetes_io_component",
+          "__meta_kubernetes_pod_label_component",
+        ]
+        regex        = "^;*([^;]+)(;.*)?$"
+        action       = "replace"
+        target_label = "component"
+      }
+
+      rule {
+        source_labels = ["__meta_kubernetes_pod_node_name"]
+        action        = "replace"
+        target_label  = "node_name"
+      }
+
+      rule {
+        source_labels = ["__meta_kubernetes_namespace"]
+        action        = "replace"
+        target_label  = "namespace"
+      }
+
+      rule {
+        source_labels = ["namespace", "app"]
+        separator     = "/"
+        action        = "replace"
+        replacement   = "$1"
+        target_label  = "job"
+      }
+
+      rule {
+        source_labels = ["__meta_kubernetes_pod_name"]
+        action        = "replace"
+        target_label  = "pod"
+      }
+
+      rule {
+        source_labels = ["__meta_kubernetes_pod_container_name"]
+        action        = "replace"
+        target_label  = "container"
+      }
+    }
+
+    loki.source.kubernetes "pod_logs" {
+      targets    = discovery.relabel.pod_logs.output
+      forward_to = [loki.write.default.receiver]
+    }
+
+    loki.write "default" {
+      endpoint {
+        url = "http://loki:3101/loki/api/v1/push"
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alloy
+  namespace: sales-system
+spec:
+  selector:
+    matchLabels:
+      app: alloy
+  template:
+    metadata:
+      labels:
+        app: alloy
+    spec:
+      serviceAccountName: alloy
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: alloy
+          image: grafana/alloy:v1.19.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - run
+            - /etc/alloy/config.alloy
+            - --storage.path=/tmp/alloy
+            - --server.http.listen-addr=0.0.0.0:12345
+            - --stability.level=generally-available
+          ports:
+            - name: http-metrics
+              containerPort: 12345
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: http-metrics
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 473
+            runAsGroup: 473
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 3400m
+          volumeMounts:
+            - name: config
+              mountPath: /etc/alloy
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: alloy-conf
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app: alloy
+  name: alloy
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+      - pods
+      - pods/log
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: alloy
+  name: alloy
+  namespace: sales-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app: alloy
+  name: alloy
+subjects:
+  - kind: ServiceAccount
+    name: alloy
+    namespace: sales-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: alloy

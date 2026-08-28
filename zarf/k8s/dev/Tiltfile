@@ -11,7 +11,7 @@
 #
 # Services are organized by labels:
 #   - data: Database (Kustomize)
-#   - observability: Grafana, Prometheus, Tempo, Loki, Promtail (Kustomize)
+#   - observability: Grafana, Prometheus, Tempo, Loki, Alloy (Kustomize)
 #   - build: Local binary compilation
 #   - services: Auth, Sales (Helm with hot-reload via live_update)
 
@@ -53,8 +53,8 @@ k8s_resource('tempo', labels=['observability'])
 k8s_yaml(kustomize('./zarf/k8s/dev/loki'), allow_duplicates=True)
 k8s_resource('loki', labels=['observability'])
 
-k8s_yaml(kustomize('./zarf/k8s/dev/promtail'), allow_duplicates=True)
-k8s_resource('promtail', labels=['observability'])
+k8s_yaml(kustomize('./zarf/k8s/dev/alloy'), allow_duplicates=True)
+k8s_resource('alloy', labels=['observability'])
 
 # =============================================================================
 # Auth Service
@@ -170,5 +170,4 @@ docker_build_with_restart(
     sync('./zarf/build/metrics', '/service/metrics'),
   ],
 )
-
 

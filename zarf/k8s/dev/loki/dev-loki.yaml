@@ -1,9 +1,5 @@
-# Promtail reads the logs and dumps them into Loki. Then Grafana reads them from
-# Loki and displays them in the dashboard. Promtail reads the logs by mounting
-# the host /var/log directory into the pods, it requires the right permissions
-# for that see ServiceAccount, ClusterRole, and ClusterRoleBinding together
-# with serviceAccountName, enableServiceLinks, and securityContext flags in
-# the Deployment of the pod.
+# Alloy reads pod logs through the Kubernetes API and sends them to Loki. Grafana
+# reads the logs from Loki and displays them in the dashboard.
 
 apiVersion: v1
 kind: Namespace
@@ -92,7 +88,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - image: grafana/loki:3.7.6
+        - image: grafana/loki:3.7.7
           name: loki
           ports:
             - name: "loki"
