@@ -66,7 +66,7 @@ func New(cfg Config) *Auth {
 		keyLookup: cfg.KeyLookup,
 		userBus:   cfg.UserBus,
 		method:    jwt.GetSigningMethod(jwt.SigningMethodRS256.Name),
-		parser:    jwt.NewParser(jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Name})),
+		parser:    jwt.NewParser(),
 		issuer:    cfg.Issuer,
 	}
 }
@@ -135,7 +135,7 @@ func (a *Auth) Authenticate(ctx context.Context, bearerToken string) (Claims, er
 	}
 
 	if err := a.opaPolicyEvaluation(ctx, regoAuthentication, RuleAuthenticate, input, ErrInvalidAuthOPA); err != nil {
-		a.log.Info(ctx, "**Authenticate-FAILED**", "token", jwtUnverified, "userID", claims.Subject)
+		a.log.Info(ctx, "**Authenticate-FAILED**", "kid", kid, "userID", claims.Subject)
 		return Claims{}, fmt.Errorf("authentication failed: %w", err)
 	}
 
